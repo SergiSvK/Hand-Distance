@@ -28,6 +28,9 @@ score = 0
 timeStart = time.time()
 totalTime = 35
 
+# distancias
+min_distances = 50
+
 while True:
 
     # Capturar una imagen de la cámara
@@ -56,7 +59,7 @@ while True:
             distanceCM = A * distance ** 2 + B * distance + C
 
             # Si la mano está lo suficientemente cerca del círculo
-            if distanceCM < 40:
+            if distanceCM < min_distances:
                 if x < cx < x + w and y < cy < y + h:
                     counter = 1
 
