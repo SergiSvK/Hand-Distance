@@ -7,7 +7,7 @@ import cvzone
 import time
 
 # Configurar la cámara
-cap = cv2.VideoCapture(1)
+cap = cv2.VideoCapture(0)
 cap.set(3, 1280)
 cap.set(4, 720)
 
@@ -107,7 +107,7 @@ while True:
     cv2.imshow("Image", img)
     key = cv2.waitKey(1)
 
-    # Si se presiona la tecla R, reiniciar el juego
+    # Sí se presiona la tecla R, reiniciar el juego
     if key == ord('r'):
         timeStart = time.time()
         score = 0
