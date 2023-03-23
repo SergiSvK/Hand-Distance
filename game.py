@@ -15,7 +15,7 @@ cap.set(4, 720)
 detector = HandDetector(detectionCon=0.8, maxHands=1)
 
 # Definir la función para calcular la distancia en centímetros
-# x es la distancia medida en píxeles y y es la distancia correspondiente en centímetros
+# x es la distancia medida en píxeles y es la distancia correspondiente en centímetros
 x = [300, 245, 200, 170, 145, 130, 112, 103, 93, 87, 80, 75, 70, 67, 62, 59, 57]
 y = [20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100]
 coff = np.polyfit(x, y, 2)  # La función es y = Ax^2 + Bx + C
@@ -29,7 +29,7 @@ timeStart = time.time()
 totalTime = 35
 
 # distancias
-min_distances = 50
+min_distances = 80
 
 while True:
 
@@ -101,13 +101,14 @@ while True:
         # Mostrar el puntaje final
         cvzone.putTextRect(img, 'Game Over', gameOverRectPos, scale=5, offset=30, thickness=7)
         cvzone.putTextRect(img, f'Your Score: {score}', yourScoreRectPos, scale=3, offset=20)
-        cvzone.putTextRect(img, 'Press R to restart', restartRectPos, scale=2, offset=10)
+        cvzone.putTextRect(img, 'Press button to restart', (int(width / 2 - 100), int(height / 2 + 120)), scale=2,
+                           offset=10)
 
     # Mostrar la imagen
     cv2.imshow("Image", img)
-    key = cv2.waitKey(1)
+    #key = cv2.waitKey(1)
 
-    # Sí se presiona la tecla R, reiniciar el juego
-    if key == ord('r'):
-        timeStart = time.time()
-        score = 0
+    # TODO: Agregar la función de reinicio del juego con un botón en la pantalla de Game Over
+    # TODO: eliminar la opcion de reinicio por teclado
+
+    #
