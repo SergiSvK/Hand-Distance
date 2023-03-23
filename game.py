@@ -108,6 +108,3 @@ while True:
     if key == ord('r'):
         timeStart = time.time()
         score = 0
-
-
-# Complete game
