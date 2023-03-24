@@ -6,8 +6,15 @@ import numpy as np
 import cvzone
 import time
 
-# Configurar la cámara
+# Crear objeto de la cámara
 cap = cv2.VideoCapture(0)
+
+# Verificar si la cámara se ha abierto correctamente
+if not cap.isOpened():
+    print("Error al abrir la cámara")
+    cap.release()
+    exit()
+
 cap.set(3, 1280)
 cap.set(4, 720)
 
@@ -26,9 +33,9 @@ color = (255, 0, 255)
 counter = 0
 score = 0
 timeStart = time.time()
-totalTime = 35
+totalTime = 10
 
-# distancias
+# Distancia mínima requerida para tocar el círculo (en centímetros)
 min_distances = 80
 
 while True:
@@ -95,20 +102,59 @@ while True:
     else:
         # Si el tiempo de juego ha terminado, mostrar la pantalla de Game Over
         gameOverRectPos = (int(width / 2 - 200), int(height / 2 - 80))
-        yourScoreRectPos = (int(width / 2 - 155), int(height / 2 - 10))
-        restartRectPos = (int(width / 2 - 115), int(height / 2 + 70))
+        yourScoreRectPos = (int(width / 2 - 155), int(height / 2 + 70))
+        restartRectPos = (int(width / 2 - 115), int(height / 2 + 220))
 
         # Mostrar el puntaje final
         cvzone.putTextRect(img, 'Game Over', gameOverRectPos, scale=5, offset=30, thickness=7)
         cvzone.putTextRect(img, f'Your Score: {score}', yourScoreRectPos, scale=3, offset=20)
-        cvzone.putTextRect(img, 'Press button to restart', (int(width / 2 - 100), int(height / 2 + 120)), scale=2,
+        cvzone.putTextRect(img, 'Press button to restart', (int(width / 2 - 165), int(height / 2 + 170)), scale=2,
                            offset=10)
 
-    # Mostrar la imagen
+        # Dibujar botones de reinicio y salida
+
+        buttonWidth = int(width / 5)
+        buttonHeight = int(height / 10)
+        buttonGap = int(buttonWidth / 2)
+
+        restartRectPos = (int(width / 2 - buttonWidth - buttonGap), int(height - buttonHeight - buttonGap))
+        exitRectPos = (int(width / 2 + buttonGap), int(height - buttonHeight - buttonGap))
+
+        cv2.rectangle(img, (restartRectPos[0], restartRectPos[1]),
+                      (restartRectPos[0] + buttonWidth, restartRectPos[1] + buttonHeight), (255, 0, 0), cv2.FILLED)
+        cv2.rectangle(img, (exitRectPos[0], exitRectPos[1]),
+                      (exitRectPos[0] + buttonWidth, exitRectPos[1] + buttonHeight), (0, 255, 0), cv2.FILLED)
+
+        cvzone.putTextRect(img, 'Restart', restartRectPos, scale=2, offset=10)
+        cvzone.putTextRect(img, 'Exit', exitRectPos, scale=2, offset=10)
+
+        # Detectar si el usuario hace clic en alguno de los botones
+        hands = detector.findHands(img, draw=False)
+        if hands:
+            lmList = hands[0]['lmList']
+            x, y, w, h = hands[0]['bbox']
+            x1, y1, z1 = lmList[5]
+            x2, y2, z2 = lmList[17]
+
+            # Detectar si el usuario hace clic en alguno de los botones
+            if restartRectPos[0] <= x1 <= restartRectPos[0] + buttonWidth and restartRectPos[1] <= y1 \
+                    <= restartRectPos[1] + buttonHeight:
+                timeStart = time.time()
+                score = 0
+                counter = 0
+
+            elif \
+                    exitRectPos[0] <= x1 <= exitRectPos[0] + buttonWidth and exitRectPos[1] <= y1 <= exitRectPos[
+                        1] + buttonHeight:
+                break
+
+        # Mostrar la imagen resultante
     cv2.imshow("Image", img)
-    #key = cv2.waitKey(1)
 
-    # TODO: Agregar la función de reinicio del juego con un botón en la pantalla de Game Over
-    # TODO: eliminar la opcion de reinicio por teclado
+    # Esperar a que el usuario presione la tecla 'q' para salir
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        break
 
-    #
+# Liberar los recursos
+cap.release()
+cv2.destroyAllWindows()
