@@ -108,8 +108,6 @@ while True:
         # Mostrar el puntaje final
         cvzone.putTextRect(img, 'Game Over', gameOverRectPos, scale=5, offset=30, thickness=7)
         cvzone.putTextRect(img, f'Your Score: {score}', yourScoreRectPos, scale=3, offset=20)
-        cvzone.putTextRect(img, 'Press button to restart', (int(width / 2 - 165), int(height / 2 + 170)), scale=2,
-                           offset=10)
 
         # Dibujar botones de reinicio y salida
 
@@ -118,15 +116,15 @@ while True:
         buttonGap = int(buttonWidth / 2)
 
         restartRectPos = (int(width / 2 - buttonWidth - buttonGap), int(height - buttonHeight - buttonGap))
-        exitRectPos = (int(width / 2 + buttonGap), int(height - buttonHeight - buttonGap))
+        # exitRectPos = (int(width / 2 + buttonGap), int(height - buttonHeight - buttonGap))
 
         cv2.rectangle(img, (restartRectPos[0], restartRectPos[1]),
                       (restartRectPos[0] + buttonWidth, restartRectPos[1] + buttonHeight), (255, 0, 0), cv2.FILLED)
-        cv2.rectangle(img, (exitRectPos[0], exitRectPos[1]),
-                      (exitRectPos[0] + buttonWidth, exitRectPos[1] + buttonHeight), (0, 255, 0), cv2.FILLED)
+        """cv2.rectangle(img, (exitRectPos[0], exitRectPos[1]),
+                      (exitRectPos[0] + buttonWidth, exitRectPos[1] + buttonHeight), (0, 255, 0), cv2.FILLED)"""
 
         cvzone.putTextRect(img, 'Restart', restartRectPos, scale=2, offset=10)
-        cvzone.putTextRect(img, 'Exit', exitRectPos, scale=2, offset=10)
+        """cvzone.putTextRect(img, 'Exit', exitRectPos, scale=2, offset=10)"""
 
         # Detectar si el usuario hace clic en alguno de los botones
         hands = detector.findHands(img, draw=False)
@@ -143,10 +141,11 @@ while True:
                 score = 0
                 counter = 0
 
+            """
             elif \
                     exitRectPos[0] <= x1 <= exitRectPos[0] + buttonWidth and exitRectPos[1] <= y1 <= exitRectPos[
                         1] + buttonHeight:
-                break
+                break"""
 
         # Mostrar la imagen resultante
     cv2.imshow("Image", img)
